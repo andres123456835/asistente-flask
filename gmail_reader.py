@@ -3,6 +3,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 import base64
 import os
+import json
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
