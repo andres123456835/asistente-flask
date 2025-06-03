@@ -3,6 +3,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from datetime import datetime, timedelta
 import os
+import json
 
 # Alcance mínimo necesario para leer eventos
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
