@@ -1,7 +1,6 @@
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import os
-import json
 from google.oauth2.credentials import Credentials
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
