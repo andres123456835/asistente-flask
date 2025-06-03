@@ -1,19 +1,12 @@
 from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from datetime import datetime, timedelta
-import os
-import json
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 def autenticar_calendar():
-    creds = None
-    creds_data = json.loads(os.environ["GOOGLE_CREDS"])
-    flow = InstalledAppFlow.from_client_config(creds_data, SCOPES)
-    creds = flow.run_console()  # sin navegador, copia/pega código desde consola de Render
+    creds = Credentials.from_authorized_user_file('token_calendar.json', SCOPES)
     return build('calendar', 'v3', credentials=creds)
-
 
 def obtener_eventos_semana():
     service = autenticar_calendar()
