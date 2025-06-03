@@ -13,7 +13,8 @@ def autenticar_gmail():
     if os.path.exists(token_path):
         creds = Credentials.from_authorized_user_file(token_path, SCOPES)
     else:
-        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+        creds_data = json.loads(os.environ["GOOGLE_CREDS_GMAIL"])
+        flow = InstalledAppFlow.from_client_config(creds_data, SCOPES)
         creds = flow.run_local_server(port=0)
         with open(token_path, 'w') as token_file:
             token_file.write(creds.to_json())
