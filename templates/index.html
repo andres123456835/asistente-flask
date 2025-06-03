@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventos de la Semana</title>
+</head>
+<body>
+    <h1>📅 Eventos de la semana</h1>
+    <ul>
+        {% for fecha, titulo in eventos %}
+            <li><strong>{{ fecha }}</strong>: {{ titulo }}</li>
+        {% else %}
+            <li>No hay eventos esta semana.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# Tokens de Google
+token_*.json
+credentials.json
+
+# Entornos virtuales
+venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
