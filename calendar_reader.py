@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 def autenticar_calendar():
-    creds = Credentials.from_authorized_user_file('token_calendar.json', SCOPES)
+    creds = Credentials.from_authorized_user_info(json.loads(os.environ["GOOGLE_TOKEN_CALENDAR"]), SCOPES)
     return build('calendar', 'v3', credentials=creds)
 
 def obtener_eventos_semana():
