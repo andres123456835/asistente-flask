@@ -7,24 +7,25 @@ import json
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
-def autenticar_gmail():
+def autenticar_gmail(usuario="nina"):
     creds = None
-    token_path = os.path.abspath("token_gmail.json")
+    token_file = f'token_gmail_{usuario}.json'
 
-    if os.path.exists(token_path):
-        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+    if os.path.exists(token_file):
+        creds = Credentials.from_authorized_user_file(token_file, SCOPES)
     else:
-        creds_data = json.loads(os.environ["GOOGLE_CREDS_GMAIL"])
+        # Si no existe el token, se espera que haya una variable de entorno GOOGLE_CREDS_GMAIL_NINA o ANDY
+        creds_env_var = f"GOOGLE_CREDS_GMAIL_{usuario.upper()}"
+        creds_data = json.loads(os.environ[creds_env_var])
         flow = InstalledAppFlow.from_client_config(creds_data, SCOPES)
         creds = flow.run_local_server(port=0)
-        with open(token_path, 'w') as token_file:
-            token_file.write(creds.to_json())
+        with open(token_file, 'w') as token:
+            token.write(creds.to_json())
 
     return build('gmail', 'v1', credentials=creds)
 
-
-def leer_ultimos_correos(n=5):
-    service = autenticar_gmail()
+def leer_ultimos_correos(n=5, usuario="nina"):
+    service = autenticar_gmail(usuario)
     results = service.users().messages().list(userId='me', labelIds=['INBOX'], maxResults=n).execute()
     mensajes = results.get('messages', [])
 
