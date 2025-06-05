@@ -3,7 +3,7 @@ from google.auth.transport.requests import Request
 import os
 from google.oauth2.credentials import Credentials
 
-SCOPES = ['https://www.googleapis.com/auth/tasks.readonly']
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 def generar_token():
     creds = None

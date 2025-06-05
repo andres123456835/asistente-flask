@@ -58,14 +58,20 @@ def obtener_tareas(usuario="nina"):
         status = t.get('status', 'needsAction')
         tid = t.get('id')
 
-        # Extraer estado desde notes
-        estado = "todo"
+        # Detectar estado y descripción según el formato
         if notes and notes.lower().startswith("status: doing"):
             estado = "doing"
+            descripcion = notes.split('\n', 1)[-1] if '\n' in notes else ''
+        elif notes and notes.lower().startswith("status: todo"):
+            estado = "todo"
+            descripcion = notes.split('\n', 1)[-1] if '\n' in notes else ''
         elif status == "completed":
             estado = "done"
+            descripcion = notes if notes else 'Sin descripción'
+        else:
+            estado = "todo"
+            descripcion = notes if notes else 'Sin descripción'
 
-        descripcion = notes.split('\n', 1)[-1] if '\n' in notes else 'Sin descripción'
         tareas[estado].append((title, descripcion, tid))
 
     return tareas
