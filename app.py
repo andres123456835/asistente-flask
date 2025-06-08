@@ -1,4 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask import jsonify
+from flask import request
+from twilio.twiml.messaging_response import MessagingResponse
+import re
 import datetime
 from threading import Thread
 from gmail_reader import leer_ultimos_correos
@@ -75,6 +79,21 @@ def mover_tarea(task_id, estado):
     }
     guardar_en_segundo_plano(estado_actual, f"mover_a_{estado}", recompensa)
     return redirect(f"/?usuario={usuario}")
+
+@app.route("/whatsapp", methods=["POST"])
+def whatsapp_webhook():
+    incoming_msg = request.form.get("Body")
+    from_number = request.form.get("From")
+
+    print(f"📥 Mensaje recibido de {from_number}: {incoming_msg}")
+
+    resp = MessagingResponse()
+    msg = resp.message()
+
+    # Respuesta básica (luego puedes conectar con tareas, eventos o IA)
+    msg.body(f"Hola, recibí tu mensaje: {incoming_msg}")
+
+    return str(resp)
 
 if __name__ == "__main__":
     app.run(debug=True)
