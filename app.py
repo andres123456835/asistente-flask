@@ -90,10 +90,27 @@ def whatsapp_webhook():
     resp = MessagingResponse()
     msg = resp.message()
 
-    # Respuesta básica (luego puedes conectar con tareas, eventos o IA)
-    msg.body(f"Hola, recibí tu mensaje: {incoming_msg}")
+    # COMANDO: Crear tarea
+    if incoming_msg.lower().startswith("crear tarea"):
+        contenido = incoming_msg[len("crear tarea"):].strip()
+        if contenido:
+            crear_tarea(titulo=contenido, descripcion="Añadida desde WhatsApp", estado="todo", usuario="nina")
+            msg.body(f"✅ Tarea creada: {contenido}")
+        else:
+            msg.body("❌ Especifica el nombre de la tarea. Ej: crear tarea Comprar pan")
+
+    # COMANDO: Ayuda
+    elif incoming_msg.lower().startswith("ayuda"):
+        msg.body("📋 Comandos disponibles:\n"
+                 "- crear tarea <nombre>\n"
+                 "- ayuda")
+
+    # RESPUESTA GENÉRICA
+    else:
+        msg.body(f"🤖 No entendí el mensaje.\nEscribe 'ayuda' para ver comandos disponibles.")
 
     return str(resp)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
