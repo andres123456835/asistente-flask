@@ -84,32 +84,27 @@ def mover_tarea(task_id, estado):
 def whatsapp_webhook():
     incoming_msg = request.form.get("Body")
     from_number = request.form.get("From")
+    usuario = "nina"  # Puedes cambiar esto luego por detección automática
 
     print(f"📥 Mensaje recibido de {from_number}: {incoming_msg}")
 
     resp = MessagingResponse()
     msg = resp.message()
 
-    # COMANDO: Crear tarea
     if incoming_msg.lower().startswith("crear tarea"):
-        contenido = incoming_msg[len("crear tarea"):].strip()
-        if contenido:
-            crear_tarea(titulo=contenido, descripcion="Añadida desde WhatsApp", estado="todo", usuario="nina")
-            msg.body(f"✅ Tarea creada: {contenido}")
-        else:
-            msg.body("❌ Especifica el nombre de la tarea. Ej: crear tarea Comprar pan")
+        # Extraer el título de la tarea
+        partes = incoming_msg.split("crear tarea", 1)
+        titulo = partes[1].strip() if len(partes) > 1 else "Tarea sin título"
 
-    # COMANDO: Ayuda
-    elif incoming_msg.lower().startswith("ayuda"):
-        msg.body("📋 Comandos disponibles:\n"
-                 "- crear tarea <nombre>\n"
-                 "- ayuda")
+        # Crear la tarea en Google Tasks
+        crear_tarea(titulo=titulo, descripcion="Añadida desde WhatsApp", estado="todo", usuario=usuario)
 
-    # RESPUESTA GENÉRICA
+        msg.body(f"✅ Tarea creada: {titulo}")
     else:
-        msg.body(f"🤖 No entendí el mensaje.\nEscribe 'ayuda' para ver comandos disponibles.")
+        msg.body(f"Hola, recibí tu mensaje: {incoming_msg}")
 
     return str(resp)
+
 
 
 if __name__ == "__main__":
