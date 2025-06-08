@@ -91,21 +91,21 @@ def whatsapp_webhook():
     resp = MessagingResponse()
     msg = resp.message()
 
-    if incoming_msg.lower().startswith("crear tarea"):
+    if incoming_msg and incoming_msg.lower().startswith("crear tarea"):
         # Extraer el título de la tarea
         partes = incoming_msg.split("crear tarea", 1)
-        titulo = partes[1].strip() if len(partes) > 1 else "Tarea sin título"
+        titulo = partes[1].strip() if len(partes) > 1 and partes[1].strip() else "Tarea sin título"
 
         # Crear la tarea en Google Tasks
-        crear_tarea(titulo=titulo, descripcion="Añadida desde WhatsApp", estado="todo", usuario=usuario)
-
-        msg.body(f"✅ Tarea creada: {titulo}")
+        try:
+            crear_tarea(titulo=titulo, descripcion="Añadida desde WhatsApp", estado="todo", usuario=usuario)
+            msg.body(f"✅ Tarea creada: {titulo}")
+        except Exception as e:
+            msg.body(f"❌ Error al crear la tarea: {str(e)}")
     else:
         msg.body(f"Hola, recibí tu mensaje: {incoming_msg}")
 
     return str(resp)
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
