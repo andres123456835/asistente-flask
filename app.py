@@ -19,7 +19,7 @@ def guardar_en_segundo_plano(estado, accion, recompensa):
 
 @app.route("/")
 def index():
-    usuario = request.args.get("usuario", "nina").lower()
+    usuario = request.args.get("usuario", "nina").lower().split("/")[0]
     correos = leer_ultimos_correos(3, usuario)
     eventos = obtener_eventos_semana(usuario)
     tareas = obtener_tareas(usuario)
@@ -44,7 +44,7 @@ def nueva_tarea():
 
 @app.route("/eliminar-tarea/<task_id>")
 def eliminar_tarea_web(task_id):
-    usuario = request.args.get("usuario", "nina").lower()
+    usuario = request.args.get("usuario", "nina").lower().split("/")[0]
     eliminar_tarea(task_id, usuario)
 
     estado_actual = {
@@ -57,13 +57,13 @@ def eliminar_tarea_web(task_id):
 
 @app.route("/cambiar-estado/<task_id>/<nuevo_estado>")
 def cambiar_estado(task_id, nuevo_estado):
-    usuario = request.args.get("usuario", "nina").lower()
+    usuario = request.args.get("usuario", "nina").lower().split("/")[0]
     actualizar_estado_tarea(task_id, nuevo_estado, usuario)
     return redirect(url_for("index", usuario=usuario))
 
 @app.route("/mover-tarea/<task_id>/<estado>")
 def mover_tarea(task_id, estado):
-    usuario = request.args.get("usuario", "nina").lower()
+    usuario = request.args.get("usuario", "nina").lower().split("/")[0]
     actualizar_estado_tarea(task_id, estado, usuario)
 
     recompensa = 0
